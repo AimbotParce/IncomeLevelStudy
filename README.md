@@ -295,5 +295,5 @@ is the ratio of proportions).
 
 ### Conclusion
 
-So, in conclusion, the kid on Tik Tok was wrong. Studying does increase
+So, in conclusion, the kid on *Tik Tok* was wrong. Studying does increase
 your income. Although, I must admit, I was expecting a bigger effect.
