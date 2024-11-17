@@ -1,4 +1,11 @@
-## Income vs Education
+---
+title: "The effect of education on income"
+author: Marc Parcerisa
+date: November 17, 2024
+output: 
+    md_document:
+        variant: markdown_github
+---
 
 Today I saw some kid on *Tik Tok* saying that there's no point in studying anything
 because doing so wouldn't increase your income. I thought that was a pretty bold
