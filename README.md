@@ -40,7 +40,7 @@ library(FactoMineR)
 ### Loading and preparing the data
 
 ``` r
-df = read_csv("income.csv")
+df <- read_csv("income.csv")
 ```
 
     ## Rows: 25000 Columns: 15
@@ -90,13 +90,13 @@ for analysis.
 
 ``` r
 # workclass column should be a factor. "?" values are N/A's
-df$workclass = as.factor(df$workclass)
-df$workclass[df$workclass == "?"] = NA
+df$workclass <- as.factor(df$workclass)
+df$workclass[df$workclass == "?"] <- NA
 
 # Education is also a factor.
-df$education = as.factor(df$education)
+df$education <- as.factor(df$education)
 
-# Also, education.num is an ordinal variable, that represents the same information 
+# Also, education.num is an ordinal variable, that represents the same information
 # as education. To check that this holds through the dataset, we'll simply check
 # that there's the same amount of unique values in "education" that there are in
 # the combination of "education" and "education.num"
@@ -113,24 +113,24 @@ length(unique(df$education)) # 16
 
 ``` r
 # Marital status, occupation, relationship, race and sex are all factors
-df$marital.status = as.factor(df$marital.status)
-df$occupation = as.factor(df$occupation)
-df$relationship = as.factor(df$relationship)
-df$race = as.factor(df$race)
-df$sex = as.factor(df$sex)
+df$marital.status <- as.factor(df$marital.status)
+df$occupation <- as.factor(df$occupation)
+df$relationship <- as.factor(df$relationship)
+df$race <- as.factor(df$race)
+df$sex <- as.factor(df$sex)
 
 # Capital gain is numeric, but it looks like there may be some values that should
 # be N/A's (Those that are 99999)
-df$capital.gain[df$capital.gain == 99999] = NA
+df$capital.gain[df$capital.gain == 99999] <- NA
 
 # Same with hours.per.week, 99 hours per week seems like a lot
-df$hours.per.week[df$hours.per.week == 99] = NA
+df$hours.per.week[df$hours.per.week == 99] <- NA
 
 # Native country is a factor
-df$native.country = as.factor(df$native.country)
+df$native.country <- as.factor(df$native.country)
 
 # Income is a factor for some reason.
-df$income = as.factor(df$income)
+df$income <- as.factor(df$income)
 ```
 
 Here’s how the data looks like now:
@@ -232,9 +232,9 @@ and `1` and then we’ll check the correlation between this new variable
 and `education.num`.
 
 ``` r
-income = as.numeric(df$income) # Easy way to create a numeric column the same size as df$income
-income[df$income == "<=50K"] = 0
-income[df$income == ">50K"] = 1
+income <- as.numeric(df$income) # Easy way to create a numeric column the same size as df$income
+income[df$income == "<=50K"] <- 0
+income[df$income == ">50K"] <- 1
 cor.test(df$education.num, income, method = "spearman")
 ```
 
@@ -261,7 +261,7 @@ Finally, we’ll use a logistic regression to check if we can predict
 income based on education.
 
 ``` r
-model = glm(income ~ education.num, data = df, family = "binomial")
+model <- glm(income ~ education.num, data = df, family = "binomial")
 summary(model)
 ```
 
@@ -284,6 +284,12 @@ summary(model)
     ## 
     ## Number of Fisher Scoring iterations: 4
 
+``` r
+plot(table(df$education.num, income))
+```
+
+![](IncomeStudy_files/figure-markdown_github/unnamed-chunk-8-1.png)
+
 From this output, we really only care about the coefficient
 *β*<sub>1</sub>, which refers to the change in the log-odds of the
 income being greater than 50K for a single education level increase. The
@@ -295,5 +301,6 @@ is the ratio of proportions).
 
 ### Conclusion
 
-So, in conclusion, the kid on *Tik Tok* was wrong. Studying does increase
-your income. Although, I must admit, I was expecting a bigger effect.
+So, in conclusion, the kid on *Tik Tok* was wrong. Studying does
+increase your income. Although, I must admit, I was expecting a bigger
+effect.
