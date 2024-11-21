@@ -1,0 +1,50 @@
+name: Update README
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - IncomeStudy.Rmd
+
+jobs:
+  update-readme:
+    
+    permissions:
+      contents: write
+      actions: write
+      
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Install R
+      uses: r-lib/actions/setup-r@v2
+      with:
+        r-version: '4.4.1'
+
+    - name: Install dependencies
+      run: Rscript .github/scripts/install_packages.R
+
+    - name: Install Pandoc
+      run: |
+        choco install pandoc -y
+        pandoc --version
+
+    - name: Render Rmd to md
+      run: Rscript -e 'rmarkdown::render("IncomeStudy.Rmd")'
+
+    - name: Move IncomeStudy.md to README.md
+      run: mv IncomeStudy.md README.md
+
+    - name: Commit changes
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add README.md
+        git commit -m 'Update README.md with contents of IncomeStudy.md'
+        git push
