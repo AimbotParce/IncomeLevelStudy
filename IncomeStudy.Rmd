@@ -10,9 +10,7 @@ output:
 <!-- README.md is generated from IncomeStudy.Rmd. Please edit that document. -->
 
 ```{r opts, echo = FALSE}
-knitr::opts_chunk$set(
-    fig.path = "images/"
-)
+knitr::opts_chunk$set(fig.path = "images/")
 ```
 
 Today I saw some kid on *Tik Tok* saying that there's no point in studying anything
