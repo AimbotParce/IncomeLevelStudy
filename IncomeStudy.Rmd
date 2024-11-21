@@ -57,7 +57,7 @@ library(FactoMineR)
 df <- read_csv("income.csv")
 summary(df)
 ```
-
+<!-- 
 Let's go column by column to clean the data and ensure that it's ready for analysis.
 
 ```{r}
@@ -164,4 +164,4 @@ that for every level of education you increase, the odds of you earning more tha
 ### Conclusion
 
 So, in conclusion, the kid on *Tik Tok* was wrong. Studying does increase your income.
-Although, I must admit, I was expecting a bigger effect.
+Although, I must admit, I was expecting a bigger effect. -->

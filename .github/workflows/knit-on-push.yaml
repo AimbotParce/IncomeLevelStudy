@@ -23,33 +23,29 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: List files in repository
-      run: ls
+    - name: Install R
+      uses: r-lib/actions/setup-r@v2
+      with:
+        r-version: '4.4.1'
 
+    - name: Install dependencies
+      run: Rscript .github/scripts/install_packages.R
 
-    # - name: Install R
-    #   uses: r-lib/actions/setup-r@v2
-    #   with:
-    #     r-version: '4.4.1'
+    - name: Install Pandoc
+      run: |
+        choco install pandoc -y
+        pandoc --version
 
-    # - name: Install dependencies
-    #   run: Rscript .github/scripts/install_packages.R
+    - name: Render Rmd to md
+      run: Rscript -e 'rmarkdown::render("IncomeStudy.Rmd")'
 
-    # - name: Install Pandoc
-    #   run: |
-    #     choco install pandoc -y
-    #     pandoc --version
+    - name: Move IncomeStudy.md to README.md
+      run: mv IncomeStudy.md README.md
 
-    # - name: Render Rmd to md
-    #   run: Rscript -e 'rmarkdown::render("IncomeStudy.Rmd")'
-
-    # - name: Move IncomeStudy.md to README.md
-    #   run: mv IncomeStudy.md README.md
-
-    # - name: Commit changes
-    #   run: |
-    #     git config --global user.name 'github-actions[bot]'
-    #     git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-    #     git add README.md
-    #     git commit -m 'Update README.md with contents of IncomeStudy.md'
-    #     git push
+    - name: Commit changes
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add README.md
+        git commit -m 'Update README.md with contents of IncomeStudy.md'
+        git push
