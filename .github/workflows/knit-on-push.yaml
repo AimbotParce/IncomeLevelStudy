@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - IncomeStudy.Rmd
+      - .github/workflows/knit-on-push.yaml # This file (for dev purposes)
 
 jobs:
   update-readme:
@@ -22,29 +23,33 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Install R
-      uses: r-lib/actions/setup-r@v2
-      with:
-        r-version: '4.4.1'
+    - name: List files in repository
+      run: ls
 
-    - name: Install dependencies
-      run: Rscript .github/scripts/install_packages.R
 
-    - name: Install Pandoc
-      run: |
-        choco install pandoc -y
-        pandoc --version
+    # - name: Install R
+    #   uses: r-lib/actions/setup-r@v2
+    #   with:
+    #     r-version: '4.4.1'
 
-    - name: Render Rmd to md
-      run: Rscript -e 'rmarkdown::render("IncomeStudy.Rmd")'
+    # - name: Install dependencies
+    #   run: Rscript .github/scripts/install_packages.R
 
-    - name: Move IncomeStudy.md to README.md
-      run: mv IncomeStudy.md README.md
+    # - name: Install Pandoc
+    #   run: |
+    #     choco install pandoc -y
+    #     pandoc --version
 
-    - name: Commit changes
-      run: |
-        git config --global user.name 'github-actions[bot]'
-        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git add README.md
-        git commit -m 'Update README.md with contents of IncomeStudy.md'
-        git push
+    # - name: Render Rmd to md
+    #   run: Rscript -e 'rmarkdown::render("IncomeStudy.Rmd")'
+
+    # - name: Move IncomeStudy.md to README.md
+    #   run: mv IncomeStudy.md README.md
+
+    # - name: Commit changes
+    #   run: |
+    #     git config --global user.name 'github-actions[bot]'
+    #     git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+    #     git add README.md
+    #     git commit -m 'Update README.md with contents of IncomeStudy.md'
+    #     git push
