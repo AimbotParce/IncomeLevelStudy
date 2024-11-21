@@ -5,7 +5,7 @@ date: November 17, 2024
 output: 
     md_document:
         variant: markdown_github
----
+--- 
 
 <!-- README.md is generated from IncomeStudy.Rmd. Please edit that document. -->
 
