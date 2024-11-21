@@ -40,7 +40,9 @@ jobs:
       run: Rscript -e 'rmarkdown::render("IncomeStudy.Rmd")'
 
     - name: Move IncomeStudy.md to README.md
-      run: mv IncomeStudy.md README.md
+      run: |
+        rm README.md
+        mv IncomeStudy.md README.md
 
     - name: Commit changes
       run: |
