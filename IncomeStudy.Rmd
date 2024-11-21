@@ -57,3 +57,111 @@ library(FactoMineR)
 df <- read_csv("income.csv")
 summary(df)
 ```
+
+Let's go column by column to clean the data and ensure that it's ready for analysis.
+
+```{r}
+# workclass column should be a factor. "?" values are N/A's
+df$workclass <- as.factor(df$workclass)
+df$workclass[df$workclass == "?"] <- NA
+
+# Education is also a factor.
+df$education <- as.factor(df$education)
+
+# Also, education.num is an ordinal variable, that represents the same information
+# as education. To check that this holds through the dataset, we'll simply check
+# that there's the same amount of unique values in "education" that there are in
+# the combination of "education" and "education.num"
+nrow(unique(df[, c("education", "education.num")])) # 16
+length(unique(df$education)) # 16
+
+# Marital status, occupation, relationship, race and sex are all factors
+df$marital.status <- as.factor(df$marital.status)
+df$occupation <- as.factor(df$occupation)
+df$relationship <- as.factor(df$relationship)
+df$race <- as.factor(df$race)
+df$sex <- as.factor(df$sex)
+
+# Capital gain is numeric, but it looks like there may be some values that should
+# be N/A's (Those that are 99999)
+df$capital.gain[df$capital.gain == 99999] <- NA
+
+# Same with hours.per.week, 99 hours per week seems like a lot
+df$hours.per.week[df$hours.per.week == 99] <- NA
+
+# Native country is a factor
+df$native.country <- as.factor(df$native.country)
+
+# Income is a factor for some reason.
+df$income <- as.factor(df$income)
+```
+
+Here's how the data looks like now:
+
+```{r}
+summary(df)
+```
+
+### Exploratory Data Analysis
+
+Now that the data is clean, let's do some exploratory data analysis to see if we can
+find any interesting patterns.
+
+Let's start by looking at the distribution of income
+```{r}
+table(df$income, df$education.num)
+```
+
+It looks like there's a clear pattern here. Looks like the higher the education,
+the more likely you are to earn more than 50K a year.
+
+There's an interesting tool to check whether two categorical values are or not 
+independent. It's called the Chi-Square test. Let's use it to check if there's a
+statistically significant relationship between income and education.
+
+```{r}
+chisq.test(table(df$income, df$education.num))
+```
+
+This test assumes the null hypothesis that there is no association between the two
+variables. The p-value is virtually zero, so we can reject the null hypothesis and
+conclude that there is a significant association between income and education.
+
+Having proven that, we want to check, not only if there's an association, but also
+that there is a positive correlation. We'll check this in two ways.
+
+First, we'll convert income to a numeric variable that takes values `0` and `1` and
+then we'll check the correlation between this new variable and `education.num`.
+
+```{r}
+income <- as.numeric(df$income) # Easy way to create a numeric column the same size as df$income
+income[df$income == "<=50K"] <- 0
+income[df$income == ">50K"] <- 1
+cor.test(df$education.num, income, method = "spearman")
+```
+
+Simply by looking at the p-value, which is virtually zero, we can conclude that 
+the hypothesis of there being no correlation between these newly created numeric
+variables can be rejected. This means that we, again, can conclude that there is
+a correlation, which the method, also, tells us to be positive (0.33).
+
+Finally, we'll use a logistic regression to check if we can predict income based on
+education.
+
+```{r}
+model <- glm(income ~ education.num, data = df, family = "binomial")
+summary(model)
+plot(table(df$education.num, income))
+```
+
+From this output, we really only care about the coefficient $\beta_1$, which refers
+to the change in the log-odds of the income being greater than 50K for a single 
+education level increase. The value for this coefficient is 0.37, with a p-value
+of virtually zero (meaning this is a statistically significant result). This means
+that for every level of education you increase, the odds of you earning more than
+50K a year increase by 44% (since $e^{0.37} = 1.44$, which is the ratio of proportions).
+
+### Conclusion
+
+So, in conclusion, the kid on *Tik Tok* was wrong. Studying does increase your income.
+Although, I must admit, I was expecting a bigger effect.
