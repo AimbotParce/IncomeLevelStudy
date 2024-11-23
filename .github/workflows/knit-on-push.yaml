@@ -37,13 +37,11 @@ jobs:
         choco install pandoc -y
         pandoc --version
 
-    - name: Render Rmd to md
-      run: Rscript -e 'rmarkdown::render("IncomeStudy.Rmd")'
+    - name: Remove old README.md
+      run: rm README.md
 
-    - name: Move IncomeStudy.md to README.md
-      run: |
-        rm README.md
-        mv IncomeStudy.md README.md
+    - name: Render Rmd to md
+      run: Rscript -e 'rmarkdown::render("IncomeStudy.Rmd", output_format = "md_document", output_file = "README.md")'
 
     - name: Commit changes
       run: |
@@ -51,5 +49,5 @@ jobs:
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
         git add README.md
         git add images/*
-        git commit -m 'Update README.md with contents of IncomeStudy.md'
+        git commit -m 'Update README.md with contents of IncomeStudy.Rmd'
         git push
